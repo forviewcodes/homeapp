@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import OrdersByDayChart from "./frontend/components/charts/ordersByDayChart";
 
 interface Transaction {
   _id: string;
@@ -58,6 +59,7 @@ export default function MainPage() {
       </div>
       <div className="border-2 border-black">
         <div>Chart Here</div>
+        <OrdersByDayChart transactions={transactions}></OrdersByDayChart>
       </div>
     </div>
   );
