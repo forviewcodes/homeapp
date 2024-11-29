@@ -58,6 +58,11 @@ export default function MainPage() {
         </div>
       </div>
       <div className="border-2 border-black">
+        <div>Post Here, Dropdown</div>
+
+        <OrdersByDayChart transactions={transactions}></OrdersByDayChart>
+      </div>
+      <div className="border-2 border-black">
         <div>Chart Here</div>
         <OrdersByDayChart transactions={transactions}></OrdersByDayChart>
       </div>

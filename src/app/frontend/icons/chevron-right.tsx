@@ -1,8 +1,4 @@
-import { JSX, SVGProps } from "react";
-
-export default function ChevronRightIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
-) {
+export default function ChevronRightIcon({ ...props }) {
   return (
     <svg
       width="20"

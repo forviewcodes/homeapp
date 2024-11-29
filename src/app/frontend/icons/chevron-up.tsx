@@ -1,4 +1,4 @@
-export default function ChevronLeftIcon({ ...props }) {
+export default function ChevronUpIcon({ ...props }) {
   return (
     <svg
       width="20"
@@ -9,9 +9,9 @@ export default function ChevronLeftIcon({ ...props }) {
       {...props}
     >
       <path
-        d="M11 5L6 10L11 15"
+        d="M5 13L10 8L15 13"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="inherit"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
