@@ -1,10 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import OrdersByDayChart from "./frontend/components/charts/ordersByDayChart";
+import SelectCategory from "./frontend/components/componentSplit/SelectCategory";
+import { Input } from "./frontend/components/ui/Input";
+import { SelectCalendar } from "./frontend/components/componentSplit/SelectCalendar";
+import { Button } from "./frontend/components/ui/Button";
+import Selections from "./frontend/components/componentSplit/Selection";
 
 interface Transaction {
   _id: string;
-  amount: number;
+  expenses: number;
   date: string;
   category: string;
   description: string;
@@ -42,29 +47,49 @@ export default function MainPage() {
   }
 
   return (
-    <div className="p-4">
-      <div className="border-2 border-black ">
-        <h1 className="text-2xl font-bold mb-4">Transactions</h1>
-        <div className="space-y-2">
-          {transactions?.map((transaction) => (
-            <div key={transaction._id} className="p-2 border rounded">
-              <p>Amount: {transaction.category}</p>
-              <p>Amount: {transaction.description}</p>
-              <p>Amount: {transaction.amount}</p>
-              <p>Date: {transaction.date}</p>
-              <p>id : {transaction._id}</p>
-            </div>
-          ))}
+    <div className="p-6 bg-white space-y-6 items-center flex flex-col">
+      <div>
+        <h1 className="text-2xl font-bold p-4 border border-gray-200 bg-gray-50 text-gray-800 rounded-t-lg">
+          Transactions
+        </h1>
+        <div className="border border-gray-200 rounded-b-lg shadow-sm max-w-md flex justify-center items-center">
+          <div className="divide-y divide-gray-100">
+            {transactions?.map((transaction) => (
+              <div
+                key={transaction._id}
+                className="p-4 hover:bg-gray-50 transition-colors"
+              >
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="font-medium text-gray-600">Category:</div>
+                  <div>{transaction.category}</div>
+
+                  <div className="font-medium text-gray-600">Description:</div>
+                  <div>{transaction.description}</div>
+
+                  <div className="font-medium text-gray-600">Amount:</div>
+                  <div className="text-green-600 font-semibold">
+                    RM {transaction.expenses}
+                  </div>
+
+                  <div className="font-medium text-gray-600">Date:</div>
+                  <div>{transaction.date}</div>
+
+                  <div className="font-medium text-gray-600">ID:</div>
+                  <div className="text-gray-500 text-xs">{transaction._id}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="border-2 border-black">
-        <div>Post Here, Dropdown</div>
 
-        <OrdersByDayChart transactions={transactions}></OrdersByDayChart>
-      </div>
-      <div className="border-2 border-black">
-        <div>Chart Here</div>
-        <OrdersByDayChart transactions={transactions}></OrdersByDayChart>
+      <Selections />
+
+      <div className="border border-gray-200 rounded-lg shadow-sm">
+        <div className="p-4 bg-gray-50 border-b font-semibold text-gray-800">
+          Chart Here
+        </div>
+        <OrdersByDayChart transactions={transactions} />
       </div>
     </div>
   );

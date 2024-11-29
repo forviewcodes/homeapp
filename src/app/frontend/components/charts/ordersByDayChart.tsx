@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 
 interface Transaction {
   _id: string;
-  amount: number;
+  expenses: number;
   date: string;
   category: string;
   description: string;
@@ -14,10 +14,10 @@ interface Props {
 }
 
 export default function OrdersByDayChart({ transactions = [] }: Props) {
-  // Process transactions to group by category and sum amounts
+  // Process transactions to group by category and sum expensess
   const categoryTotals = transactions.reduce((acc, transaction) => {
     const category = transaction.category || "Uncategorized";
-    acc[category] = (acc[category] || 0) + transaction.amount;
+    acc[category] = (acc[category] || 0) + transaction.expenses;
     return acc;
   }, {} as Record<string, number>);
 
@@ -51,7 +51,7 @@ export default function OrdersByDayChart({ transactions = [] }: Props) {
         </Pie>
         <Tooltip
           formatter={(value: number) =>
-            `$${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+            `RM ${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
           }
         />
         <Legend />
