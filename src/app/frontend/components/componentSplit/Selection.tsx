@@ -31,6 +31,53 @@ export default function Selections() {
     }
   };
 
+  const handlePostData = async () => {
+    try {
+      const response = await fetch(
+        "http://192.168.0.10:3000/api/postTransactions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(savedData),
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        alert("Data posted successfully!");
+        console.log(result);
+      } else {
+        // Handle HTTP error responses more specifically
+        const errorBody = await response.text();
+        alert(
+          `Failed to post data. Status: ${response.status} ${response.statusText}`
+        );
+        console.error(`Error details: ${errorBody}`);
+      }
+    } catch (error) {
+      // More comprehensive error handling
+      if (error instanceof TypeError) {
+        if (error.message.includes("NetworkError")) {
+          alert(
+            "Network error: Unable to connect to the server. Please check your internet connection."
+          );
+        } else if (error.message.includes("Failed to fetch")) {
+          alert("Connection failed: The server might be down or unreachable.");
+        }
+      } else if (error instanceof SyntaxError) {
+        alert("Data parsing error: The response from the server is invalid.");
+      } else {
+        // Fallback for any other unexpected errors
+        alert(`Unexpected error: THIS IS AN ISSUE`);
+      }
+
+      // Log the full error for debugging
+      console.error("Full error details:", error);
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden">
       <div className="bg-indigo-600 text-white px-6 py-4">
@@ -100,6 +147,7 @@ export default function Selections() {
         )}
         <Button
           disabled={!savedData}
+          onClick={handlePostData}
           className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50"
         >
           Post Data

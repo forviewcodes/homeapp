@@ -6,13 +6,14 @@ import { Input } from "./frontend/components/ui/Input";
 import { SelectCalendar } from "./frontend/components/componentSplit/SelectCalendar";
 import { Button } from "./frontend/components/ui/Button";
 import Selections from "./frontend/components/componentSplit/Selection";
+import BudgetEssentialChart from "./frontend/components/charts/budgetEssential";
 
 interface Transaction {
   _id: string;
   expenses: number;
   date: string;
   category: string;
-  description: string;
+  remarks: string;
 }
 
 export default function MainPage() {
@@ -48,6 +49,7 @@ export default function MainPage() {
 
   return (
     <div className="p-6 bg-white space-y-6 items-center flex flex-col">
+      <Selections />
       <div>
         <h1 className="text-2xl font-bold p-4 border border-gray-200 bg-gray-50 text-gray-800 rounded-t-lg">
           Transactions
@@ -63,8 +65,8 @@ export default function MainPage() {
                   <div className="font-medium text-gray-600">Category:</div>
                   <div>{transaction.category}</div>
 
-                  <div className="font-medium text-gray-600">Description:</div>
-                  <div>{transaction.description}</div>
+                  <div className="font-medium text-gray-600">Remarks:</div>
+                  <div>{transaction.remarks}</div>
 
                   <div className="font-medium text-gray-600">Amount:</div>
                   <div className="text-green-600 font-semibold">
@@ -83,13 +85,9 @@ export default function MainPage() {
         </div>
       </div>
 
-      <Selections />
-
-      <div className="border border-gray-200 rounded-lg shadow-sm">
-        <div className="p-4 bg-gray-50 border-b font-semibold text-gray-800">
-          Chart Here
-        </div>
+      <div className="border border-gray-200 min-w-[800px] rounded-lg shadow-sm">
         <OrdersByDayChart transactions={transactions} />
+        <BudgetEssentialChart transactions={transactions} />
       </div>
     </div>
   );

@@ -9,27 +9,33 @@ import {
   SelectValue,
 } from "../ui/Select";
 
-// Define types
 type MainCategory =
-  | "essentials"
-  | "food"
-  | "utilities"
-  | "savings"
-  | "transport"
-  | "health";
+  | "Essentials"
+  | "Food"
+  | "Utilities"
+  | "Savings"
+  | "Transport"
+  | "Health";
 
-// Mapping of main categories to their inner categories
 const categoryMap: Record<MainCategory, string[]> = {
-  essentials: ["House Rent", "Parking Rent", "Childcare", "Belanja Dalila"],
-  food: ["Groceries", "Eat Out", "Entertainment"],
-  utilities: [
+  Essentials: [
+    "House Rent",
+    "Parking Rent",
+    "Kiddocare",
+    "Childcare",
+    "Belanja Dalila",
+    "Budget",
+  ],
+  Food: ["Groceries", "Eat Out", "Entertainment", "Budget"],
+  Utilities: [
     "Electric Bills",
     "Water Bills",
     "Internet Bills",
     "Telco",
     "Icloud",
+    "Budget",
   ],
-  savings: [
+  Savings: [
     "Sinking Fund",
     "Emergency Fund",
     "Harris TH",
@@ -40,9 +46,10 @@ const categoryMap: Record<MainCategory, string[]> = {
     "Noah TH",
     "Noah ASB",
     "Noah PG",
+    "Budget",
   ],
-  transport: ["Fuel", "Toll", "Maintenance", "Urgent Repair"],
-  health: ["Medical Card", "Outpatient", "Vaccine"],
+  Transport: ["Fuel", "Toll", "Maintenance", "Urgent Repair", "Budget"],
+  Health: ["Medical Card", "Outpatient", "Vaccine", "Medicine", "Budget"],
 };
 
 interface SelectCategoryProps {
@@ -59,7 +66,7 @@ export default function SelectCategory({
 
   const handleMainCategoryChange = (value: MainCategory) => {
     setMainCategory(value);
-    setInnerCategory(""); // Reset inner category
+    setInnerCategory("");
     onMainCategoryChange?.(value);
   };
 
