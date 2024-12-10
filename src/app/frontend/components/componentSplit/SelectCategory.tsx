@@ -15,9 +15,18 @@ type MainCategory =
   | "Utilities"
   | "Savings"
   | "Transport"
-  | "Health";
+  | "Health"
+  | "InputMoney";
 
 const categoryMap: Record<MainCategory, string[]> = {
+  InputMoney: [
+    "Dalila Salary",
+    "Harris Salary",
+    "Claim",
+    "Gift",
+    "Part Time",
+    "Etc",
+  ],
   Essentials: [
     "House Rent",
     "Parking Rent",

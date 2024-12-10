@@ -30,6 +30,20 @@ export default function BudgetEssentialChart({ transactions = [] }: Props) {
     return acc;
   }, {} as Record<string, number>);
 
+  const essentialsList = [
+    "House Rent",
+    "Parking Rent",
+    "Kiddocare",
+    "Childcare",
+    "Belanja Dalila",
+  ];
+  const essentialsLeftover = essentialsList.filter(
+    (essentials) =>
+      !Object.keys(categoryEssentialsUsed).some((category) =>
+        category.includes(essentials)
+      )
+  );
+
   //calculate Total Value of Essentials Used
   const totalValueEssentialsUsed = Object.values(categoryEssentialsUsed).reduce(
     (total, value) => total + value,
@@ -163,6 +177,12 @@ export default function BudgetEssentialChart({ transactions = [] }: Props) {
         Total Budget Essentials Leftover is&nbsp;
         <div className="text-blue-500">
           RM {totalValueEssentialsBudgetLeftover.toFixed(2)}
+        </div>
+      </div>
+      <div className=" flex items-center justify-center p-2 font-semibold border">
+        Essentials Leftover is&nbsp;
+        <div className="text-blue-500">
+          | {essentialsLeftover.join(" | ")} |
         </div>
       </div>
     </div>

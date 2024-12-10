@@ -8,6 +8,7 @@ import BudgetUtilitiesChart from "./frontend/components/charts/budgetUtilities";
 import BudgetTransportChart from "./frontend/components/charts/budgetTransport";
 import BudgetForceSavingChart from "./frontend/components/charts/budgetForceSaving";
 import BudgetHealthChart from "./frontend/components/charts/budgetHealth";
+import BudgetInputMoneyChart from "./frontend/components/charts/budgetInputMoney";
 
 interface Transaction {
   _id: string;
@@ -87,6 +88,7 @@ export default function MainPage() {
       </div>
 
       <div className="border border-gray-200 min-w-[800px] rounded-lg shadow-sm">
+        <BudgetInputMoneyChart transactions={transactions} />
         <BudgetTotalChart transactions={transactions} />
         <BudgetFoodChart transactions={transactions} />
         <BudgetEssentialChart transactions={transactions} />

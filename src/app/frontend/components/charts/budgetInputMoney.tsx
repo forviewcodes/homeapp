@@ -13,66 +13,66 @@ interface Props {
   transactions?: Transaction[];
 }
 
-export default function BudgetHealthChart({ transactions = [] }: Props) {
-  //Category B - Calculate for Health Used/Health Total Budget Health
+export default function BudgetInputMoneyChart({ transactions = [] }: Props) {
+  //Category B - Calculate for InputMoney Input/InputMoney Total Budget InputMoney
   //======================================================================
 
-  //Find Total Health Used
-  //Calculate Total Health Used as collection of object
-  const categoryHealthUsed = transactions.reduce((acc, transaction) => {
-    if (
-      transaction.category.includes("Health") &&
-      !transaction.category.includes("Budget")
-    ) {
+  //Find Total InputMoney Input
+  //Calculate Total InputMoney Input as collection of object
+  const categoryInputInputMoney = transactions.reduce((acc, transaction) => {
+    if (transaction.category.includes("InputMoney")) {
       const category = transaction.category;
       acc[category] = (acc[category] || 0) + transaction.expenses;
     }
     return acc;
   }, {} as Record<string, number>);
 
-  const healthList = ["Medical Card", "Outpatient", "Vaccine", "Medicine"];
+  //For Showing List of items not key in yet
+  const InputMoneyList = [
+    "Dalila Salary",
+    "Harris Salary",
+    "Claim",
+    "Gift",
+    "Part Time",
+    "Etc",
+  ];
 
-  const healthLeftover = healthList.filter(
-    (health) =>
-      !Object.keys(categoryHealthUsed).some((category) =>
-        category.includes(health)
+  const InputMoneyLeftover = InputMoneyList.filter(
+    (InputMoney) =>
+      !Object.keys(categoryInputInputMoney).some((category) =>
+        category.includes(InputMoney)
       )
   );
 
-  //calculate Total Value of Health Used
-  const totalValueHealthUsed = Object.values(categoryHealthUsed).reduce(
+  //calculate Total Value of InputMoney Input
+  const totalValueInputMoney = Object.values(categoryInputInputMoney).reduce(
     (total, value) => total + value,
     0
   );
 
-  //Find Total Health Budget Set Up
-  const categoryHealthBudget = transactions.reduce((acc, transaction) => {
-    if (
-      transaction.category.includes("Budget") &&
-      transaction.category.includes("Health")
-    ) {
-      const category = "Health Budget";
+  //Find Total InputMoney Budget Set Up
+  const categoryInputMoneyBudget = transactions.reduce((acc, transaction) => {
+    if (transaction.category.includes("Budget")) {
+      const category = "InputMoney Budget";
       acc[category] = (acc[category] || 0) + transaction.expenses;
     }
     return acc;
   }, {} as Record<string, number>);
 
-  const totalValueHealthBudget = categoryHealthBudget["Health Budget"];
-  const totalValueHealthBudgetLeftover =
-    totalValueHealthBudget - totalValueHealthUsed;
+  const totalValueInputMoneyBudget =
+    categoryInputMoneyBudget["InputMoney Budget"];
+  const totalValueSpare = totalValueInputMoney - totalValueInputMoneyBudget;
 
-  //Feed Data used and Leftover
+  //Feed Data Input and Leftover
   const dataCategoryCFeedMain = [
-    { name: "Used", value: totalValueHealthUsed },
-    { name: "Leftover", value: totalValueHealthBudgetLeftover },
+    { name: "Input", value: totalValueInputMoneyBudget },
+    { name: "Leftover", value: totalValueSpare },
   ];
 
-  const categoryBFeedAllAdd = [
-    { name: "Leftover", value: totalValueHealthBudgetLeftover },
-  ];
+  const categoryBFeedAllAdd = [{ name: "Leftover", value: totalValueSpare }];
 
   // Recharts use array format
-  const dataCategoryCFeedAllArray = Object.entries(categoryHealthUsed).map(
+  const dataCategoryCFeedAllArray = Object.entries(categoryInputInputMoney).map(
     ([name, value]) => ({
       name,
       value,
@@ -89,7 +89,7 @@ export default function BudgetHealthChart({ transactions = [] }: Props) {
   return (
     <div className="w-full justify-center">
       <div className="p-4 bg-gray-50 border font-semibold text-gray-800">
-        Health Used / Total Budget Health
+        Total Budget Input Money / Input Money
       </div>
       <div className="flex">
         <PieChart width={800} height={700}>
@@ -99,9 +99,7 @@ export default function BudgetHealthChart({ transactions = [] }: Props) {
             cy="50%"
             labelLine={false}
             label={({ name, value }) =>
-              `${name} (${((value / totalValueHealthBudget) * 100).toFixed(
-                0
-              )}%)`
+              `${name} (${((value / totalValueInputMoney) * 100).toFixed(2)}%)`
             }
             outerRadius={150}
             fill="#8884d8"
@@ -131,9 +129,7 @@ export default function BudgetHealthChart({ transactions = [] }: Props) {
             cy="50%"
             labelLine={false}
             label={({ name, value }) =>
-              `${name} (${((value / totalValueHealthBudget) * 100).toFixed(
-                0
-              )}%)`
+              `${name} (${((value / totalValueInputMoney) * 100).toFixed(2)}%)`
             }
             outerRadius={150}
             fill="#8884d8"
@@ -158,26 +154,26 @@ export default function BudgetHealthChart({ transactions = [] }: Props) {
       </div>
 
       <div className=" flex items-center justify-center p-2 font-semibold border">
-        Total Health Used is&nbsp;
+        Total InputMoney is&nbsp;
         <div className="text-blue-500">
-          RM {totalValueHealthUsed.toFixed(2)}
+          RM {totalValueInputMoney.toFixed(2)}
         </div>
       </div>
       <div className=" flex items-center justify-center p-2 font-semibold border">
-        Total Budget Health is&nbsp;
+        Total Budget InputMoney is&nbsp;
         <div className="text-blue-500">
-          RM {totalValueHealthBudget.toFixed(2)}
+          RM {totalValueInputMoneyBudget.toFixed(2)}
         </div>
       </div>
       <div className=" flex items-center justify-center p-2 font-semibold border">
-        Total Budget Health Leftover is&nbsp;
-        <div className="text-blue-500">
-          RM {totalValueHealthBudgetLeftover.toFixed(2)}
-        </div>
+        Total Budget InputMoney Leftover is&nbsp;
+        <div className="text-blue-500">RM {totalValueSpare.toFixed(2)}</div>
       </div>
       <div className=" flex items-center justify-center p-2 font-semibold border">
-        Health Leftover is&nbsp;
-        <div className="text-blue-500">| {healthLeftover.join(" | ")} |</div>
+        InputMoney Leftover is&nbsp;
+        <div className="text-blue-500">
+          | {InputMoneyLeftover.join(" | ")} |
+        </div>
       </div>
     </div>
   );

@@ -30,6 +30,14 @@ export default function BudgetTransportChart({ transactions = [] }: Props) {
     return acc;
   }, {} as Record<string, number>);
 
+  const transportList = ["Fuel", "Toll", "Maintenance", "Urgent Repair"];
+  const transportLeftover = transportList.filter(
+    (transport) =>
+      !Object.keys(categoryTransportsUsed).some((category) =>
+        category.includes(transport)
+      )
+  );
+
   //calculate Total Value of Transports Used
   const totalValueTransportsUsed = Object.values(categoryTransportsUsed).reduce(
     (total, value) => total + value,
@@ -166,6 +174,10 @@ export default function BudgetTransportChart({ transactions = [] }: Props) {
         <div className="text-blue-500">
           RM {totalValueTransportsBudgetLeftover.toFixed(2)}
         </div>
+      </div>
+      <div className=" flex items-center justify-center p-2 font-semibold border">
+        Transport Leftover is&nbsp;
+        <div className="text-blue-500">| {transportLeftover.join(" | ")} |</div>
       </div>
     </div>
   );

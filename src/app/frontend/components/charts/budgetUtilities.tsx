@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
+import { Switch } from "../ui/Switch";
 
 interface Transaction {
   _id: string;
@@ -14,6 +15,8 @@ interface Props {
 }
 
 export default function BudgetUtilitiesChart({ transactions = [] }: Props) {
+  // State to control visibility
+  const [isVisible, setIsVisible] = useState(true);
   //Category B - Calculate for Utilities Used/Utilities Total Budget Utilities
   //======================================================================
 
@@ -29,6 +32,21 @@ export default function BudgetUtilitiesChart({ transactions = [] }: Props) {
     }
     return acc;
   }, {} as Record<string, number>);
+
+  const utilitiesList = [
+    "Electric Bills",
+    "Water Bills",
+    "Internet Bills",
+    "Telco",
+    "Icloud",
+  ];
+
+  const utilitiesLeftover = utilitiesList.filter(
+    (utility) =>
+      !Object.keys(categoryUtilitiesUsed).some((category) =>
+        category.includes(utility)
+      )
+  );
 
   //calculate Total Value of Utilities Used
   const totalValueUtilitiesUsed = Object.values(categoryUtilitiesUsed).reduce(
@@ -79,97 +97,109 @@ export default function BudgetUtilitiesChart({ transactions = [] }: Props) {
 
   return (
     <div className="w-full justify-center">
-      <div className="p-4 bg-gray-50 border font-semibold text-gray-800">
+      <div className="p-4 bg-gray-50 border font-semibold text-gray-800 justify-between items-center flex">
         Utilities Used / Total Budget Utilities
+        <div className="flex items-center space-x-2">
+          <span>Show Details</span>
+          <Switch checked={isVisible} onCheckedChange={setIsVisible} />
+        </div>
       </div>
-      <div className="flex">
-        <PieChart width={800} height={700}>
-          <Pie
-            data={dataCategoryCFeedMain}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={({ name, value }) =>
-              `${name} (${((value / totalValueUtilitiesBudget) * 100).toFixed(
-                0
-              )}%)`
-            }
-            outerRadius={150}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {dataCategoryCFeedMain.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
+      {isVisible && (
+        <>
+          <div className="flex">
+            <PieChart width={800} height={700}>
+              <Pie
+                data={dataCategoryCFeedMain}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, value }) =>
+                  `${name} (${(
+                    (value / totalValueUtilitiesBudget) *
+                    100
+                  ).toFixed(0)}%)`
+                }
+                outerRadius={150}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {dataCategoryCFeedMain.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value: number) =>
+                  `RM ${value.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}`
+                }
               />
-            ))}
-          </Pie>
-          <Tooltip
-            formatter={(value: number) =>
-              `RM ${value.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-              })}`
-            }
-          />
-          <Legend />
-        </PieChart>
+              <Legend />
+            </PieChart>
 
-        <PieChart width={800} height={700}>
-          <Pie
-            data={dataCategoryCFeedAll}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={({ name, value }) =>
-              `${name} (${((value / totalValueUtilitiesBudget) * 100).toFixed(
-                0
-              )}%)`
-            }
-            outerRadius={150}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {dataCategoryCFeedAll.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
+            <PieChart width={800} height={700}>
+              <Pie
+                data={dataCategoryCFeedAll}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, value }) =>
+                  `${name} (${(
+                    (value / totalValueUtilitiesBudget) *
+                    100
+                  ).toFixed(0)}%)`
+                }
+                outerRadius={150}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {dataCategoryCFeedAll.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value: number) =>
+                  `RM ${value.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}`
+                }
               />
-            ))}
-          </Pie>
-          <Tooltip
-            formatter={(value: number) =>
-              `RM ${value.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-              })}`
-            }
-          />
-          <Legend />
-        </PieChart>
-      </div>
+              <Legend />
+            </PieChart>
+          </div>
 
-      <div className=" flex items-center justify-center p-2 font-semibold border">
-        Total Utilities Used is&nbsp;
-        <div className="text-blue-500">
-          RM {totalValueUtilitiesUsed.toFixed(2)}
-        </div>
-      </div>
-      <div className=" flex items-center justify-center p-2 font-semibold border">
-        Total Budget Utilities is&nbsp;
-        <div className="text-blue-500">
-          RM {totalValueUtilitiesBudget.toFixed(2)}
-        </div>
-      </div>
-      <div className=" flex items-center justify-center p-2 font-semibold border">
-        Total Budget Utilities Leftover is&nbsp;
-        <div className="text-blue-500">
-          RM {totalValueUtilitiesBudgetLeftover.toFixed(2)}
-        </div>
-      </div>
-      <div className=" flex items-center justify-center p-2 font-semibold border">
-        Utilities Leftover is&nbsp;
-        <div className="text-blue-500"></div>
-      </div>
+          <div className=" flex items-center justify-center p-2 font-semibold border">
+            Total Utilities Used is&nbsp;
+            <div className="text-blue-500">
+              RM {totalValueUtilitiesUsed.toFixed(2)}
+            </div>
+          </div>
+          <div className=" flex items-center justify-center p-2 font-semibold border">
+            Total Budget Utilities is&nbsp;
+            <div className="text-blue-500">
+              RM {totalValueUtilitiesBudget.toFixed(2)}
+            </div>
+          </div>
+          <div className=" flex items-center justify-center p-2 font-semibold border">
+            Total Budget Utilities Leftover is&nbsp;
+            <div className="text-blue-500">
+              RM {totalValueUtilitiesBudgetLeftover.toFixed(2)}
+            </div>
+          </div>
+          <div className=" flex items-center justify-center p-2 font-semibold border">
+            Utilities Leftover is&nbsp;
+            <div className="text-blue-500">
+              | {utilitiesLeftover.join(" | ")} |
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
