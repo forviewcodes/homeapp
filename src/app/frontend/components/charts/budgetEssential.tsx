@@ -49,7 +49,6 @@ export default function BudgetEssentialChart({ transactions = [] }: Props) {
   }, {} as Record<string, number>);
   const totalValueEssentialsBudget =
     categoryEssentialsBudget["Essentials Budget"];
-  console.log(totalValueEssentialsBudget);
   const totalValueEssentialsBudgetLeftover =
     totalValueEssentialsBudget - totalValueEssentialsUsed;
 
@@ -83,76 +82,87 @@ export default function BudgetEssentialChart({ transactions = [] }: Props) {
       <div className="p-4 bg-gray-50 border font-semibold text-gray-800">
         Essentials Used / Total Budget Essentials
       </div>
-
-      <PieChart width={800} height={700}>
-        <Pie
-          data={dataCategoryBFeedMain}
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={({ name, value }) =>
-            `${name} (${((value / totalValueEssentialsBudget) * 100).toFixed(
-              0
-            )}%)`
-          }
-          outerRadius={150}
-          fill="#8884d8"
-          dataKey="value"
-        >
-          {dataCategoryBFeedMain.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Tooltip
-          formatter={(value: number) =>
-            `RM ${value.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-            })}`
-          }
-        />
-        <Legend />
-      </PieChart>
-      <PieChart width={800} height={700}>
-        <Pie
-          data={dataCategoryBFeedAll}
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={({ name, value }) =>
-            `${name} (${((value / totalValueEssentialsBudget) * 100).toFixed(
-              0
-            )}%)`
-          }
-          outerRadius={150}
-          fill="#8884d8"
-          dataKey="value"
-        >
-          {dataCategoryBFeedAll.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Tooltip
-          formatter={(value: number) =>
-            `RM ${value.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-            })}`
-          }
-        />
-        <Legend />
-      </PieChart>
+      <div className="flex">
+        <PieChart width={800} height={700}>
+          <Pie
+            data={dataCategoryBFeedMain}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={({ name, value }) =>
+              `${name} (${((value / totalValueEssentialsBudget) * 100).toFixed(
+                0
+              )}%)`
+            }
+            outerRadius={150}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {dataCategoryBFeedMain.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip
+            formatter={(value: number) =>
+              `RM ${value.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}`
+            }
+          />
+          <Legend />
+        </PieChart>
+        <PieChart width={800} height={700}>
+          <Pie
+            data={dataCategoryBFeedAll}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={({ name, value }) =>
+              `${name} (${((value / totalValueEssentialsBudget) * 100).toFixed(
+                0
+              )}%)`
+            }
+            outerRadius={150}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {dataCategoryBFeedAll.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip
+            formatter={(value: number) =>
+              `RM ${value.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}`
+            }
+          />
+          <Legend />
+        </PieChart>
+      </div>
 
       <div className=" flex items-center justify-center p-2 font-semibold border">
         Total Essentials Used is&nbsp;
-        <div className="text-blue-500">RM {totalValueEssentialsUsed}</div>
+        <div className="text-blue-500">
+          RM {totalValueEssentialsUsed.toFixed(2)}
+        </div>
       </div>
       <div className=" flex items-center justify-center p-2 font-semibold border">
         Total Budget Essentials is&nbsp;
-        <div className="text-blue-500">RM {totalValueEssentialsBudget}</div>
+        <div className="text-blue-500">
+          RM {totalValueEssentialsBudget.toFixed(2)}
+        </div>
       </div>
       <div className=" flex items-center justify-center p-2 font-semibold border">
         Total Budget Essentials Leftover is&nbsp;
         <div className="text-blue-500">
-          RM {totalValueEssentialsBudgetLeftover}
+          RM {totalValueEssentialsBudgetLeftover.toFixed(2)}
         </div>
       </div>
     </div>

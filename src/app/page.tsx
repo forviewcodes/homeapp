@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import OrdersByDayChart from "./frontend/components/charts/ordersByDayChart";
-import SelectCategory from "./frontend/components/componentSplit/SelectCategory";
-import { Input } from "./frontend/components/ui/Input";
-import { SelectCalendar } from "./frontend/components/componentSplit/SelectCalendar";
-import { Button } from "./frontend/components/ui/Button";
 import Selections from "./frontend/components/componentSplit/Selection";
 import BudgetEssentialChart from "./frontend/components/charts/budgetEssential";
+import BudgetFoodChart from "./frontend/components/charts/budgetFood";
+import BudgetTotalChart from "./frontend/components/charts/budgetTotal";
+import BudgetUtilitiesChart from "./frontend/components/charts/budgetUtilities";
+import BudgetTransportChart from "./frontend/components/charts/budgetTransport";
+import BudgetForceSavingChart from "./frontend/components/charts/budgetForceSaving";
+import BudgetHealthChart from "./frontend/components/charts/budgetHealth";
 
 interface Transaction {
   _id: string;
@@ -86,8 +87,13 @@ export default function MainPage() {
       </div>
 
       <div className="border border-gray-200 min-w-[800px] rounded-lg shadow-sm">
-        <OrdersByDayChart transactions={transactions} />
+        <BudgetTotalChart transactions={transactions} />
+        <BudgetFoodChart transactions={transactions} />
         <BudgetEssentialChart transactions={transactions} />
+        <BudgetForceSavingChart transactions={transactions} />
+        <BudgetHealthChart transactions={transactions} />
+        <BudgetTransportChart transactions={transactions} />
+        <BudgetUtilitiesChart transactions={transactions} />
       </div>
     </div>
   );
