@@ -1,4 +1,5 @@
 "use client";
+export  const runtime = "edge"
 import { useEffect, useState } from "react";
 import Selections from "./frontend/components/componentSplit/Selection";
 import BudgetEssentialChart from "./frontend/components/charts/budgetEssential";

@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient, ServerApiVersion } from "mongodb";
 

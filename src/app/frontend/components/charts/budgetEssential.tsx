@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 import { Switch } from "../ui/Switch";
