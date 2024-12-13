@@ -12,23 +12,26 @@ import BudgetHealthChart from "./frontend/components/charts/budgetHealth";
 import BudgetInputMoneyChart from "./frontend/components/charts/budgetInputMoney";
 import { Switch } from "./frontend/components/ui/Switch";
 
+// Define the interface for each transaction record
 interface TransactionArray {
-  _id: string;            // Unique identifier for each expense record
-  category: string;       // Category of the expense (e.g., "Food - Eat Out", "Transport - Fuel", etc.)
-  expenses: number;       // Amount of money spent (in numeric form)
-  date: string;           // Date when the expense was recorded (ISO 8601 format, e.g., "2024-12-10")
-  remarks: string;        // Description or remarks associated with the expense
+  _id: string;
+  category: string;
+  expenses: number;
+  date: string;
+  remarks: string;
 }
 
-interface Transaction {
-  documents: TransactionArray[];  // Array of expense documents
+// Define the interface for the initial response object
+interface TransactionInitial {
+  documents: TransactionArray[];
 }
 
+// Define the state for transactions as an array of TransactionArray objects
 export default function MainPage() {
-  const [transactions, setTransactions] = useState<Transaction | null>(null); // Set initial state to null
+  const [transactionInitial, setTransactionInitial] = useState<TransactionInitial | null>(null); // State to store the entire initial response
+  const [transactions, setTransactions] = useState<TransactionArray[]>([]); // State to store the actual documents array
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // State to control visibility
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -38,8 +41,9 @@ export default function MainPage() {
         if (!response.ok) {
           throw new Error("Failed to fetch transactions");
         }
-        const data: Transaction = await response.json();
-        setTransactions(data); // Store the entire data object, not just documents
+        const data: TransactionInitial = await response.json();
+        setTransactionInitial(data); // Set the full response in state
+        setTransactions(data.documents); // Extract the documents array
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -71,7 +75,7 @@ export default function MainPage() {
         {isVisible && (
           <div className="border border-gray-200 rounded-b-lg shadow-sm max-w-md flex justify-center items-center">
             <div className="divide-y divide-gray-100">
-              {transactions?.documents.map((transaction) => (
+              {transactions.map((transaction) => (
                 <div
                   key={transaction._id}
                   className="p-4 hover:bg-gray-50 transition-colors"
@@ -104,14 +108,14 @@ export default function MainPage() {
       </div>
 
       <div className="border border-gray-200 min-w-[800px] rounded-lg shadow-sm">
-        <BudgetInputMoneyChart transactions={transactions?.documents} />
-        <BudgetTotalChart transactions={transactions?.documents} />
-        <BudgetFoodChart transactions={transactions?.documents} />
-        <BudgetEssentialChart transactions={transactions?.documents} />
-        <BudgetForceSavingChart transactions={transactions?.documents} />
-        <BudgetHealthChart transactions={transactions?.documents} />
-        <BudgetTransportChart transactions={transactions?.documents} />
-        <BudgetUtilitiesChart transactions={transactions?.documents} />
+        <BudgetInputMoneyChart transactions={transactions} />
+        <BudgetTotalChart transactions={transactions} />
+        <BudgetFoodChart transactions={transactions} />
+        <BudgetEssentialChart transactions={transactions} />
+        <BudgetForceSavingChart transactions={transactions} />
+        <BudgetHealthChart transactions={transactions} />
+        <BudgetTransportChart transactions={transactions} />
+        <BudgetUtilitiesChart transactions={transactions} />
       </div>
     </div>
   );
