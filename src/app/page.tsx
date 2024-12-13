@@ -1,5 +1,5 @@
 "use client";
-export  const runtime = "edge"
+export const runtime = "edge";
 import { useEffect, useState } from "react";
 import Selections from "./frontend/components/componentSplit/Selection";
 import BudgetEssentialChart from "./frontend/components/charts/budgetEssential";
@@ -12,16 +12,20 @@ import BudgetHealthChart from "./frontend/components/charts/budgetHealth";
 import BudgetInputMoneyChart from "./frontend/components/charts/budgetInputMoney";
 import { Switch } from "./frontend/components/ui/Switch";
 
+interface TransactionArray {
+  _id: string;            // Unique identifier for each expense record
+  category: string;       // Category of the expense (e.g., "Food - Eat Out", "Transport - Fuel", etc.)
+  expenses: number;       // Amount of money spent (in numeric form)
+  date: string;           // Date when the expense was recorded (ISO 8601 format, e.g., "2024-12-10")
+  remarks: string;        // Description or remarks associated with the expense
+}
+
 interface Transaction {
-  _id: string;
-  expenses: number;
-  date: string;
-  category: string;
-  remarks: string;
+  documents: TransactionArray[];  // Array of expense documents
 }
 
 export default function MainPage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<Transaction | null>(null); // Set initial state to null
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // State to control visibility
@@ -34,8 +38,8 @@ export default function MainPage() {
         if (!response.ok) {
           throw new Error("Failed to fetch transactions");
         }
-        const data: Transaction[] = await response.json();
-        setTransactions(data);
+        const data: Transaction = await response.json();
+        setTransactions(data); // Store the entire data object, not just documents
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -45,12 +49,12 @@ export default function MainPage() {
     fetchTransactions();
   }, []);
 
-  const transactionData = transactions;
-
+  // If transactions are still loading, show a loading state
   if (loading) {
     return <div className="p-4">Loading transactions...</div>;
   }
 
+  // If there's an error, display it
   if (error) {
     return <div className="p-4 text-red-500">Error: {error}</div>;
   }
@@ -67,7 +71,7 @@ export default function MainPage() {
         {isVisible && (
           <div className="border border-gray-200 rounded-b-lg shadow-sm max-w-md flex justify-center items-center">
             <div className="divide-y divide-gray-100">
-              {transactions?.map((transaction) => (
+              {transactions?.documents.map((transaction) => (
                 <div
                   key={transaction._id}
                   className="p-4 hover:bg-gray-50 transition-colors"
@@ -100,14 +104,14 @@ export default function MainPage() {
       </div>
 
       <div className="border border-gray-200 min-w-[800px] rounded-lg shadow-sm">
-        <BudgetInputMoneyChart transactions={transactionData} />
-        <BudgetTotalChart transactions={transactionData} />
-        <BudgetFoodChart transactions={transactionData}/>
-        <BudgetEssentialChart transactions={transactionData}/>
-        <BudgetForceSavingChart transactions={transactionData}/>
-        <BudgetHealthChart transactions={transactionData} />
-        <BudgetTransportChart transactions={transactionData} />
-        <BudgetUtilitiesChart transactions={transactionData} />
+        <BudgetInputMoneyChart transactions={transactions?.documents} />
+        <BudgetTotalChart transactions={transactions?.documents} />
+        <BudgetFoodChart transactions={transactions?.documents} />
+        <BudgetEssentialChart transactions={transactions?.documents} />
+        <BudgetForceSavingChart transactions={transactions?.documents} />
+        <BudgetHealthChart transactions={transactions?.documents} />
+        <BudgetTransportChart transactions={transactions?.documents} />
+        <BudgetUtilitiesChart transactions={transactions?.documents} />
       </div>
     </div>
   );
