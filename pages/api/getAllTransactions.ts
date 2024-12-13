@@ -21,7 +21,6 @@ export default async function handler(request: Request) {
     // Log the raw response status and text
     const responseText = await response.text();
     console.log('Response status:', response.status);
-    console.log('Response text:', responseText);
 
     // Try to parse the response
     let result;

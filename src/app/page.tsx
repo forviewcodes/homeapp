@@ -21,14 +21,8 @@ interface TransactionArray {
   remarks: string;
 }
 
-// Define the interface for the initial response object
-interface TransactionInitial {
-  documents: TransactionArray[];
-}
-
 // Define the state for transactions as an array of TransactionArray objects
 export default function MainPage() {
-  const [transactionInitial, setTransactionInitial] = useState<TransactionInitial | null>(null); // State to store the entire initial response
   const [transactions, setTransactions] = useState<TransactionArray[]>([]); // State to store the actual documents array
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,10 +35,10 @@ export default function MainPage() {
         if (!response.ok) {
           throw new Error("Failed to fetch transactions");
         }
-        const data: TransactionInitial = await response.json();
-        setTransactionInitial(data); // Set the full response in state
-        setTransactions(data.documents); // Extract the documents array
+        const data: TransactionArray[] = await response.json(); // Expect an array of transactions
+        setTransactions(data); // Set the fetched transactions array to state
         setLoading(false);
+        console.log(data)
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
         setLoading(false);
