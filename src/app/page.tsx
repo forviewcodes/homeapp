@@ -45,6 +45,8 @@ export default function MainPage() {
     fetchTransactions();
   }, []);
 
+  const transactionData = transactions;
+
   if (loading) {
     return <div className="p-4">Loading transactions...</div>;
   }
@@ -98,14 +100,14 @@ export default function MainPage() {
       </div>
 
       <div className="border border-gray-200 min-w-[800px] rounded-lg shadow-sm">
-        <BudgetInputMoneyChart transactions={transactions} />
-        <BudgetTotalChart transactions={transactions} />
-        <BudgetFoodChart transactions={transactions} />
-        <BudgetEssentialChart transactions={transactions} />
-        <BudgetForceSavingChart transactions={transactions} />
-        <BudgetHealthChart transactions={transactions} />
-        <BudgetTransportChart transactions={transactions} />
-        <BudgetUtilitiesChart transactions={transactions} />
+        <BudgetInputMoneyChart transactions={transactionData} />
+        <BudgetTotalChart transactions={transactionData} />
+        <BudgetFoodChart transactions={transactionData}/>
+        <BudgetEssentialChart transactions={transactionData}/>
+        <BudgetForceSavingChart transactions={transactionData}/>
+        <BudgetHealthChart transactions={transactionData} />
+        <BudgetTransportChart transactions={transactionData} />
+        <BudgetUtilitiesChart transactions={transactionData} />
       </div>
     </div>
   );
