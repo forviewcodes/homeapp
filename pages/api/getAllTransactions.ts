@@ -1,32 +1,66 @@
 export const runtime = 'edge';
-import { NextApiRequest, NextApiResponse } from "next";
-import { MongoClient, ServerApiVersion } from "mongodb";
 
-const uri = process.env.MONGODB_URL;
-if (!uri) {
-  throw new Error("MONGODB_URL environment variable is not set");
-}
-
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(request: Request) {
   try {
-    await client.connect();
-    const db = client.db("budgetDatabase");
-    const data = await db.collection("DailyTransaction").find({}).toArray();
-    return res.status(200).json(data);
+    const response = await fetch('https://ap-southeast-1.aws.data.mongodb-api.com/app/data-luvcj/endpoint/data/v1/action/find', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Request-Headers': '*',
+        'api-key': process.env.MONGODB_DATA_API_KEY!,
+      },
+      body: JSON.stringify({
+      "collection":"DailyTransaction",
+    "database":"budgetDatabase",
+    "dataSource":"Cluster0",
+        filter: {},
+        sort: { _id: -1 } // Sort by most recent first
+      })
+    });
+
+    // Log the raw response status and text
+    const responseText = await response.text();
+    console.log('Response status:', response.status);
+    console.log('Response text:', responseText);
+
+    // Try to parse the response
+    let result;
+    try {
+      result = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('JSON Parsing Error:', parseError);
+      return new Response(JSON.stringify({ 
+        error: "Failed to parse response",
+        rawResponse: responseText
+      }), { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Check if the result has documents
+    if (!result || !result.documents) {
+      return new Response(JSON.stringify({ 
+        error: "No documents found",
+        fullResponse: result
+      }), { 
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
+    return new Response(JSON.stringify(result.documents), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
-    return res.status(500).json({ error: "Failed to fetch data" });
-  } finally {
-    await client.close();
+    console.error('Fetch Error:', error);
+    return new Response(JSON.stringify({ 
+      error: "Failed to fetch transactions",
+      details: error instanceof Error ? error.message : error
+    }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
