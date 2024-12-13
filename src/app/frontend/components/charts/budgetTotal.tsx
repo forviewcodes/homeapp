@@ -15,8 +15,8 @@ interface Props {
 }
 
 export default function BudgetTotalChart({ transactions = [] }: Props) {
-  // State to control visibility
-  const [isVisible, setIsVisible] = useState(true);
+  // State to control visibility, initially set to false (closed)
+  const [isVisible, setIsVisible] = useState(false);
 
   //Find Total Budget Used
   //====================================================

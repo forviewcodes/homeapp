@@ -16,7 +16,7 @@ interface Props {
 
 export default function BudgetUtilitiesChart({ transactions = [] }: Props) {
   // State to control visibility
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   //Category B - Calculate for Utilities Used/Utilities Total Budget Utilities
   //======================================================================
 
