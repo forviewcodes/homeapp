@@ -60,6 +60,7 @@ export default function MainPage() {
   return (
     <div className="p-6 bg-white space-y-6 items-center flex flex-col">
       <Selections />
+      
 
       <div>
         <h1 className=" min-w-[450px] flex text-2xl font-bold p-4 border border-gray-200 bg-gray-50 text-gray-800 rounded-t-lg items-center justify-between">

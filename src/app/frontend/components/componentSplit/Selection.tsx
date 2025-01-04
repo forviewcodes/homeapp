@@ -3,8 +3,10 @@ import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
 import SelectCategory from "./SelectCategory";
 import ControlledDateInput from "./SelectDayFormatter";
+import { Switch } from "../../../frontend/components/ui/Switch";
 
 export default function Selections() {
+  const [isVisible, setIsVisible] = useState(false);
   const [mainCategory, setMainCategory] = useState("");
   const [innerCategory, setInnerCategory] = useState("");
   const [amount, setAmount] = useState("");
@@ -80,9 +82,12 @@ export default function Selections() {
 
   return (
     <div className="max-w-md mx-auto bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden">
+     
       <div className="bg-indigo-600 text-white px-6 py-4">
-        <h2 className="text-xl font-bold tracking-tight">Create New Post</h2>
+        <h2 className="text-xl font-bold tracking-tight items-center justify-between flex"> <div className="pr-3">Create New Post  </div>         <Switch checked={isVisible} onCheckedChange={setIsVisible} /></h2>
       </div>
+      {isVisible &&(
+      <div>
       <div className="p-6 space-y-6">
         <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-4">
           <label className="block text-sm font-medium text-indigo-700 mb-2">
@@ -153,6 +158,9 @@ export default function Selections() {
           Post Data
         </Button>
       </div>
+      </div>
+      ) }
+    
     </div>
   );
 }
