@@ -106,7 +106,7 @@ export default function BudgetEssentialChart({ transactions = [] }: Props) {
       </div>
       {isVisible && (
         <>
-          <div className="flex">
+          <div>
             <PieChart width={800} height={700}>
               <Pie
                 data={dataCategoryBFeedMain}

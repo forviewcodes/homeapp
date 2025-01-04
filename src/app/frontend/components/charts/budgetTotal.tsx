@@ -96,7 +96,7 @@ export default function BudgetTotalChart({ transactions = [] }: Props) {
 
       {isVisible && (
         <>
-          <div className="flex">
+          <div className="">
             <PieChart width={800} height={700}>
               <Pie
                 data={dataCategoryAFeed}
